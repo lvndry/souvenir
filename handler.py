@@ -1,7 +1,6 @@
+## Handler files where all the functions of routes are called
 from flask_restful import Resource, reqparse
 import psycopg2
-from psycopg2.extensions import quote_ident
-from psycopg2 import sql
 import json
 
 conn = psycopg2.connect("dbname=feed user=postgres")
@@ -11,17 +10,18 @@ parser.add_argument('content')
 
 class index(Resource):
     def get(self):
+        print(cur.connection)
         return {'Response': 'Index page', 'Status': 200}
 
 class createMessage(Resource):
     def post(self):
         try:
             args = parser.parse_args()
+            print(args)
             content = str(args['content'])
             cur.execute("INSERT INTO messages (content) VALUES (%s) RETURNING id", (content,))
             id = cur.fetchone()[0]
             conn.commit()
-            cur.close()
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
         return {'Id': id, 'Content': content, 'Status': 201}
@@ -52,7 +52,16 @@ class updateMessage(Resource):
             content = str(args['content'])
             cur.execute("UPDATE messages SET content=%s WHERE id=%s", (content, id))
             conn.commit()
-            cur.close()
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
         return {'Update': content, 'Status': 201}
+
+class deleteMessage(Resource):
+    def delete(self, id):
+        try:
+            cur.execute("DELETE FROM messages WHERE id=%s", (id,))
+            row = cur.rowcount
+            conn.commit()
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+        return {'Delete': row, 'Status': 201}
