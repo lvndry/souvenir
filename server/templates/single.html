@@ -1,13 +1,14 @@
 {% extends 'layout.html' %} {% block nav %}
 
 <nav class="nav">
-  <a class="nav-link active" href="all.html">All your memories</a>
-  <a class="nav-link" href="new.html">Save a memory</a>
-  <a class="nav-link" href="all.html">Another link</a>
-  <a class="nav-link disabled" href="all.html">Disabled</a>
+  <h3>Souvenirs</h3>
+  <div class="nl">
+    <a class="nav-link active" href="/">All your memories</a>
+    <a class="nav-link" href="/memory/new">Save a memory</a>
+  </div>
 </nav>
 
-{% enddblock %} {% block main %}
+{% endblock %} {% block main %}
 <main>
   {{ memory }}
 </main>

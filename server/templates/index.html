@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block script %}
+<script type="text/javascript" src="{{url_for('static', filename='js/index.js')}}"></script>
+{% endblock %}
+
+{% block nav %}
+<nav class="nav">
+  <h3>Souvenirs</h3>
+</nav>
+{% endblock %}
+
+{% block main %}
+<main>
+  <div class="container">
+    <h1> I'll remember your memories for you </h1>
+    <div class="row options">
+      <div class="inf col-lg-5" id="sam">
+        <p> Show all the memories</p>
+      </div>
+      <div class="inf col-offset-6 col-lg-5" id="nm">
+        <p> Save a memory</p>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

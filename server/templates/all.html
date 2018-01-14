@@ -1,9 +1,24 @@
-{% extends 'layout.html' %} {% block main %}
-<main class="container">
-  <div class="row">
+{% extends 'layout.html' %} {% block nav %}
+
+<nav class="nav">
+  <h3>Souvenirs</h3>
+  <a class="nav-link active" href="/">All your memories</a>
+  <a class="nav-link" href="/memory/new">Save a memory</a>
+</nav>
+
+{% endblock %} {% block main %}
+<main class="container-fluid">
+  <div class="panel-group">
     {% for memory in memories %}
-    <p> {{ memory[2] }} </p>
-    <p> {{ memory[1]}} </p>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="panel-title">
+          {{ memory[3] }}
+        </div>
+       </div>
+      <div class="panel-body"> {{ memory[1] }} </div>
+      <div class="panel-footer"><h6> {{ memory[2]}} </h6></div>
+    </div>
     {% endfor %}
   </div>
 </main>

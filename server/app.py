@@ -12,27 +12,33 @@ cur = conn.cursor()
 
 app = Flask(__name__)
 
+
 @app.route('/', methods=['GET'])
 def index():
     headers = {'Content-Type': 'text/html'}
-    return render_template('new.html', title='Souvenir'), 200, headers
+    return render_template('index.html'), 200, headers
 
-@app.route('/memory/new', methods=['POST'])
+
+@app.route('/memory/new', methods=['POST', 'GET'])
 def createMessage():
-    print(request)
-    try:
-        if request.form['memory']:
-            memory = request.form['memory']
-            date = request.form['date']
-            print(memory)
-            print(date)
-            print(type(date))
-            cur.execute('INSERT INTO memories (memory, date) VALUES (%s, %s) RETURNING id', (memory, date))
-            id = cur.fetchone()[0]
-            conn.commit()
-    except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
-    return jsonify(memory=memory, status=200)
+    if request.method == 'GET':
+        return render_template('new.html', title='New souvenir'), 200
+
+    if request.method == 'POST':
+        try:
+            if request.form['memory']:
+                memory = request.form['memory']
+                date = request.form['date']
+                title = request.form['title']
+                print(memory)
+                print(date)
+                cur.execute("INSERT INTO memories (title, memory, date) VALUES (%s, %s, %s) RETURNING id", (title, memory, date))
+                id = cur.fetchone()[0]
+                conn.commit()
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+        return jsonify(memory=memory, status=200)
+
 
 @app.route('/memory/show/all', methods=['GET'])
 def getAllMessages():
@@ -44,6 +50,7 @@ def getAllMessages():
         print(error)
     return make_response(render_template('all.html', memories=data), 200)
 
+
 @app.route('/memory/show/<id>', methods=['GET'])
 def showOne(id):
     try:
@@ -53,6 +60,7 @@ def showOne(id):
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
     return make_response(render_template('single.html', memory=memory), 200)
+
 
 @app.route('/memory/edit/<id>', methods=['PUT'])
 def editMessage(id):
@@ -65,6 +73,7 @@ def editMessage(id):
         print(error)
     return jsonify(memory=memory, status=200)
 
+
 @app.route('/memory/delete/<id>', methods=['DELETE'])
 def deleteMessage(id):
     try:
@@ -74,6 +83,7 @@ def deleteMessage(id):
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
     return jsonify(delete=row, status=200)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
