@@ -1,0 +1,10 @@
+{% extends 'layout.html' %} {% block main %}
+<main class="container">
+  <div class="row">
+    {% for memory in memories %}
+    <p> {{ memory[2] }} </p>
+    <p> {{ memory[1]}} </p>
+    {% endfor %}
+  </div>
+</main>
+{% endblock %}
