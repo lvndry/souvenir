@@ -1,1 +1,2 @@
-# CRUD Python
+# Souvenir
+## Simple CRUD application to save your memories
